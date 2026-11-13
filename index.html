@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+
+  <title>JARVIS | Controle SAC</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #07152b;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .painel {
+      width: 100%;
+      max-width: 440px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #5acaff;
+      font-size: 42px;
+      letter-spacing: 6px;
+      margin-bottom: 5px;
+    }
+
+    .subtitulo {
+      color: #a9c2df;
+      font-size: 13px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #122a4b;
+      border: 1px solid #31547c;
+      border-radius: 20px;
+      padding: 30px 20px;
+    }
+
+    .microfone {
+      width: 130px;
+      height: 130px;
+      margin: 20px auto;
+      border: 4px solid #5acaff;
+      border-radius: 50%;
+      background: #126eae;
+      color: white;
+      font-size: 55px;
+      cursor: pointer;
+    }
+
+    .microfone.ouvindo {
+      background: #d42c48;
+      border-color: #ff8ba1;
+      box-shadow: 0 0 30px #d42c4877;
+    }
+
+    .microfone:disabled {
+      opacity: .7;
+    }
+
+    .frase {
+      color: #69d8ff;
+      font-weight: bold;
+      line-height: 1.6;
+    }
+
+    #status {
+      background: #091b33;
+      padding: 18px;
+      border-radius: 12px;
+      margin-top: 20px;
+      min-height: 80px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .aviso {
+      color: #9cb6d6;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="painel">
+
+    <h1>JARVIS</h1>
+
+    <p class="subtitulo">
+      CONTROLE DE VOZ | MONITORAMENTO SAC
+    </p>
+
+    <div class="card">
+
+      <p>Toque no microfone e fale seu comando.</p>
+
+      <button
+        id="microfone"
+        class="microfone"
+        type="button"
+        aria-label="Ativar reconhecimento de voz">
+        🎙️
+      </button>
+
+      <p class="frase">
+        “Jarvis, abre o Painel do SAC
+        de Belford Roxo, por favor.”
+      </p>
+
+      <div id="status">
+        Aguardando comando de voz...
+      </div>
+
+    </div>
+
+    <p class="aviso">
+      JARVIS SAC — TESTE DE RECONHECIMENTO
+      <br>
+      Nenhum comando será enviado à televisão nesta etapa.
+    </p>
+
+  </main>
+
+  <script>
+    'use strict';
+
+    const Reconhecimento =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+    const botao =
+      document.getElementById('microfone');
+
+    const status =
+      document.getElementById('status');
+
+    let ativo = false;
+
+    function escrever(mensagem) {
+      status.textContent = mensagem;
+    }
+
+    function normalizar(texto) {
+      return String(texto || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[.,!?]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function identificarComando(frase) {
+      const texto = normalizar(frase);
+
+      if (!texto.includes('jarvis')) {
+        return 'Não encontrei a palavra Jarvis.';
+      }
+
+      if (texto.includes('belford roxo')) {
+        return 'BELFORD';
+      }
+
+      if (
+        texto.includes('sac geral') ||
+        texto.includes('painel geral')
+      ) {
+        return 'GERAL';
+      }
+
+      if (
+        texto.includes('atualiza') ||
+        texto.includes('atualizar')
+      ) {
+        return 'ATUALIZAR';
+      }
+
+      return 'Comando não identificado.';
+    }
+
+    if (!Reconhecimento) {
+      botao.disabled = true;
+
+      escrever(
+        'Este navegador não oferece reconhecimento de voz compatível.'
+      );
+
+    } else {
+
+      botao.addEventListener('click', function() {
+        if (ativo) return;
+
+        ativo = true;
+        botao.disabled = true;
+
+        const voz = new Reconhecimento();
+
+        voz.lang = 'pt-BR';
+        voz.continuous = false;
+        voz.interimResults = false;
+        voz.maxAlternatives = 1;
+
+        voz.onstart = function() {
+          botao.classList.add('ouvindo');
+          escrever('🎙️ Estou ouvindo...');
+        };
+
+        voz.onresult = function(evento) {
+          const frase =
+            evento.results[0][0].transcript;
+
+          const comando =
+            identificarComando(frase);
+
+          escrever(
+            'Você disse:\n' + frase +
+            '\n\nComando identificado:\n' +
+            comando
+          );
+        };
+
+        voz.onerror = function(evento) {
+          escrever(
+            'Erro no microfone: ' +
+            evento.error
+          );
+        };
+
+        voz.onend = function() {
+          ativo = false;
+          botao.disabled = false;
+          botao.classList.remove('ouvindo');
+        };
+
+        try {
+          voz.start();
+
+        } catch (erro) {
+          ativo = false;
+          botao.disabled = false;
+
+          escrever(
+            'Falha ao iniciar: ' +
+            erro.message
+          );
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
