@@ -6,157 +6,265 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1">
 
-  <title>JARVIS | Controle SAC</title>
+  <meta name="theme-color" content="#07152b">
+
+  <title>JARVIS SAC | Controle Remoto</title>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
-      background: #07152b;
-      color: #fff;
+      padding: 24px 16px;
+      background:
+        radial-gradient(
+          circle at top,
+          #173b64 0%,
+          #07152b 55%
+        );
+      color: #ffffff;
       font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
     }
 
-    .painel {
-      width: 100%;
-      max-width: 440px;
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
       text-align: center;
     }
 
-    h1 {
-      color: #5acaff;
-      font-size: 42px;
-      letter-spacing: 6px;
-      margin-bottom: 5px;
+    .titulo {
+      margin: 12px 0 4px;
+      font-size: 44px;
+      font-weight: 800;
+      letter-spacing: 5px;
+      color: #61d5ff;
     }
 
     .subtitulo {
-      color: #a9c2df;
-      font-size: 13px;
-      margin-bottom: 30px;
+      margin-bottom: 28px;
+      color: #b5c9e0;
+      font-size: 12px;
+      letter-spacing: 2px;
     }
 
-    .card {
-      background: #122a4b;
-      border: 1px solid #31547c;
-      border-radius: 20px;
-      padding: 30px 20px;
+    .painel {
+      padding: 24px 18px;
+      border: 1px solid #315c87;
+      border-radius: 22px;
+      background: #102644;
+      box-shadow: 0 12px 35px #00000044;
+    }
+
+    .descricao {
+      color: #dce9f8;
+      line-height: 1.5;
     }
 
     .microfone {
+      display: block;
       width: 130px;
       height: 130px;
-      margin: 20px auto;
-      border: 4px solid #5acaff;
+      margin: 24px auto;
+      border: 4px solid #67d7ff;
       border-radius: 50%;
-      background: #126eae;
-      color: white;
-      font-size: 55px;
+      background: #126ca8;
+      color: #ffffff;
+      font-size: 56px;
       cursor: pointer;
+      box-shadow: 0 0 25px #35baff44;
+      transition: 0.2s;
+    }
+
+    .microfone:active {
+      transform: scale(0.96);
     }
 
     .microfone.ouvindo {
-      background: #d42c48;
-      border-color: #ff8ba1;
-      box-shadow: 0 0 30px #d42c4877;
+      background: #d22c4c;
+      border-color: #ff91a5;
+      box-shadow: 0 0 35px #ff4b7077;
+      animation: pulsar 1s infinite;
+    }
+
+    @keyframes pulsar {
+      50% {
+        box-shadow: 0 0 12px #ff4b7033;
+      }
     }
 
     .microfone:disabled {
-      opacity: .7;
+      opacity: 0.55;
+      cursor: not-allowed;
     }
 
-    .frase {
-      color: #69d8ff;
+    .exemplo {
+      color: #75ddff;
+      font-size: 14px;
       font-weight: bold;
       line-height: 1.6;
     }
 
-    #status {
-      background: #091b33;
-      padding: 18px;
+    .status {
+      margin-top: 22px;
+      padding: 18px 12px;
+      min-height: 90px;
+      border: 1px solid #274b70;
       border-radius: 12px;
-      margin-top: 20px;
-      min-height: 80px;
+      background: #071a31;
+      color: #e8f4ff;
       line-height: 1.6;
-      overflow-wrap: anywhere;
       white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
 
-    .aviso {
-      color: #9cb6d6;
+    .botoes {
+      display: grid;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .botao {
+      width: 100%;
+      padding: 20px 12px;
+      border: 0;
+      border-radius: 13px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 15px #00000033;
+    }
+
+    .botao:active {
+      transform: scale(0.98);
+    }
+
+    .belford {
+      background: #087d59;
+    }
+
+    .geral {
+      background: #175caa;
+    }
+
+    .atualizar {
+      background: #af701b;
+    }
+
+    .rodape {
+      margin-top: 28px;
+      color: #91a8c5;
       font-size: 12px;
-      line-height: 1.6;
-      margin-top: 25px;
+      letter-spacing: 1px;
     }
   </style>
 </head>
 
 <body>
 
-  <main class="painel">
+  <main class="container">
 
-    <h1>JARVIS</h1>
+    <h1 class="titulo">JARVIS</h1>
 
-    <p class="subtitulo">
-      CONTROLE DE VOZ | MONITORAMENTO SAC
-    </p>
+    <div class="subtitulo">
+      CONTROLE REMOTO INTELIGENTE | SAC
+    </div>
 
-    <div class="card">
+    <section class="painel">
 
-      <p>Toque no microfone e fale seu comando.</p>
+      <p class="descricao">
+        Toque no microfone e fale com o Jarvis.
+      </p>
 
       <button
-        id="microfone"
-        class="microfone"
         type="button"
-        aria-label="Ativar reconhecimento de voz">
+        class="microfone"
+        id="microfone"
+        aria-label="Ativar comando de voz">
         🎙️
       </button>
 
-      <p class="frase">
-        “Jarvis, abre o Painel do SAC
-        de Belford Roxo, por favor.”
-      </p>
-
-      <div id="status">
-        Aguardando comando de voz...
+      <div class="exemplo">
+        "Jarvis, abre o painel do SAC
+        de Belford Roxo, por favor."
       </div>
+
+      <div
+        class="status"
+        id="status"
+        aria-live="polite">
+        🤖 JARVIS PRONTO!
+        Aguardando comando...
+      </div>
+
+    </section>
+
+    <div class="botoes">
+
+      <button
+        type="button"
+        class="botao belford"
+        data-comando="BELFORD">
+        🟢 ABRIR SAC BELFORD ROXO
+      </button>
+
+      <button
+        type="button"
+        class="botao geral"
+        data-comando="GERAL">
+        🔵 ABRIR SAC GERAL
+      </button>
+
+      <button
+        type="button"
+        class="botao atualizar"
+        data-comando="ATUALIZAR">
+        🔄 ATUALIZAR DADOS DA TV
+      </button>
 
     </div>
 
-    <p class="aviso">
-      JARVIS SAC — TESTE DE RECONHECIMENTO
-      <br>
-      Nenhum comando será enviado à televisão nesta etapa.
-    </p>
+    <footer class="rodape">
+      GRUPO MEGA RIO | JARVIS SAC
+    </footer>
 
   </main>
 
   <script>
     'use strict';
 
-    const Reconhecimento =
+    /*
+     * PONTE JARVIS
+     * URL JÁ CONFIGURADA.
+     */
+    const JARVIS_URL =
+      'https://script.google.com/macros/s/AKfycbxxLNdLS7fVSlebVB4OfOMpl5pCetbV3jNC4joCBW-Jm7LIdhOC09-pIB1vp3sFO29E/exec';
+
+    const statusEl =
+      document.getElementById('status');
+
+    const microfoneEl =
+      document.getElementById('microfone');
+
+    const SpeechAPI =
       window.SpeechRecognition ||
       window.webkitSpeechRecognition;
 
-    const botao =
-      document.getElementById('microfone');
+    let ouvindo = false;
 
-    const status =
-      document.getElementById('status');
-
-    let ativo = false;
-
-    function escrever(mensagem) {
-      status.textContent = mensagem;
+    /*
+     * MOSTRAR MENSAGEM
+     */
+    function mostrarStatus(mensagem) {
+      statusEl.textContent = mensagem;
     }
 
+    /*
+     * NORMALIZAR TEXTO
+     */
     function normalizar(texto) {
       return String(texto || '')
         .normalize('NFD')
@@ -167,101 +275,210 @@
         .trim();
     }
 
+    /*
+     * IDENTIFICAR COMANDO DE VOZ
+     */
     function identificarComando(frase) {
       const texto = normalizar(frase);
 
       if (!texto.includes('jarvis')) {
-        return 'Não encontrei a palavra Jarvis.';
+        return '';
       }
 
-      if (texto.includes('belford roxo')) {
+      if (
+        texto.includes('belford roxo') ||
+        texto.includes('belford')
+      ) {
         return 'BELFORD';
       }
 
       if (
         texto.includes('sac geral') ||
-        texto.includes('painel geral')
+        texto.includes('painel geral') ||
+        texto.includes('abrir geral')
       ) {
         return 'GERAL';
       }
 
       if (
         texto.includes('atualiza') ||
-        texto.includes('atualizar')
+        texto.includes('recarrega')
       ) {
         return 'ATUALIZAR';
       }
 
-      return 'Comando não identificado.';
+      return '';
     }
 
-    if (!Reconhecimento) {
-      botao.disabled = true;
+    /*
+     * ENVIAR COMANDO À PONTE
+     */
+    async function enviarComando(comando) {
+      const permitidos = [
+        'BELFORD',
+        'GERAL',
+        'ATUALIZAR'
+      ];
 
-      escrever(
-        'Este navegador não oferece reconhecimento de voz compatível.'
+      if (!permitidos.includes(comando)) {
+        mostrarStatus(
+          '❌ Comando não autorizado.'
+        );
+        return;
+      }
+
+      mostrarStatus(
+        '📡 Enviando comando: ' + comando
+      );
+
+      try {
+        const dados = new URLSearchParams();
+        dados.append('comando', comando);
+
+        /*
+         * O Apps Script não fornece CORS
+         * para leitura direta da resposta
+         * pelo GitHub Pages.
+         *
+         * no-cors permite tentar enviar
+         * o POST sem ler a resposta.
+         */
+        await fetch(JARVIS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: dados,
+          redirect: 'follow'
+        });
+
+        mostrarStatus(
+          '📡 Solicitação enviada: ' +
+          comando +
+          '\n\nConfira a planilha de comandos ' +
+          'e a televisão para confirmar.'
+        );
+
+      } catch (erro) {
+        mostrarStatus(
+          '❌ Falha ao enviar comando.\n' +
+          erro.message
+        );
+      }
+    }
+
+    /*
+     * BOTÕES MANUAIS
+     */
+    document.querySelectorAll(
+      '[data-comando]'
+    ).forEach(function(botao) {
+
+      botao.addEventListener(
+        'click',
+        function() {
+          enviarComando(
+            botao.dataset.comando
+          );
+        }
+      );
+
+    });
+
+    /*
+     * RECONHECIMENTO DE VOZ
+     */
+    if (!SpeechAPI) {
+      microfoneEl.disabled = true;
+
+      mostrarStatus(
+        '⚠️ Este navegador não oferece ' +
+        'reconhecimento de voz.\n' +
+        'Use os botões abaixo.'
       );
 
     } else {
 
-      botao.addEventListener('click', function() {
-        if (ativo) return;
+      microfoneEl.addEventListener(
+        'click',
+        function() {
 
-        ativo = true;
-        botao.disabled = true;
+          if (ouvindo) return;
 
-        const voz = new Reconhecimento();
+          const reconhecimento =
+            new SpeechAPI();
 
-        voz.lang = 'pt-BR';
-        voz.continuous = false;
-        voz.interimResults = false;
-        voz.maxAlternatives = 1;
+          reconhecimento.lang = 'pt-BR';
+          reconhecimento.continuous = false;
+          reconhecimento.interimResults = false;
+          reconhecimento.maxAlternatives = 1;
 
-        voz.onstart = function() {
-          botao.classList.add('ouvindo');
-          escrever('🎙️ Estou ouvindo...');
-        };
+          reconhecimento.onstart = function() {
+            ouvindo = true;
 
-        voz.onresult = function(evento) {
-          const frase =
-            evento.results[0][0].transcript;
+            microfoneEl.classList.add(
+              'ouvindo'
+            );
 
-          const comando =
-            identificarComando(frase);
+            mostrarStatus(
+              '🎙️ JARVIS OUVINDO...\n' +
+              'Pode falar seu comando.'
+            );
+          };
 
-          escrever(
-            'Você disse:\n' + frase +
-            '\n\nComando identificado:\n' +
-            comando
-          );
-        };
+          reconhecimento.onresult =
+            function(evento) {
 
-        voz.onerror = function(evento) {
-          escrever(
-            'Erro no microfone: ' +
-            evento.error
-          );
-        };
+              const frase =
+                evento.results[0][0].transcript;
 
-        voz.onend = function() {
-          ativo = false;
-          botao.disabled = false;
-          botao.classList.remove('ouvindo');
-        };
+              const comando =
+                identificarComando(frase);
 
-        try {
-          voz.start();
+              if (!comando) {
+                mostrarStatus(
+                  '🤖 Não identifiquei um ' +
+                  'comando válido.\n\n' +
+                  'Você disse:\n' + frase
+                );
+                return;
+              }
 
-        } catch (erro) {
-          ativo = false;
-          botao.disabled = false;
+              mostrarStatus(
+                '🎙️ Você disse:\n' + frase +
+                '\n\nComando: ' + comando
+              );
 
-          escrever(
-            'Falha ao iniciar: ' +
-            erro.message
-          );
+              enviarComando(comando);
+            };
+
+          reconhecimento.onerror =
+            function(evento) {
+
+              mostrarStatus(
+                '⚠️ Erro no microfone: ' +
+                evento.error
+              );
+            };
+
+          reconhecimento.onend = function() {
+            ouvindo = false;
+
+            microfoneEl.classList.remove(
+              'ouvindo'
+            );
+          };
+
+          try {
+            reconhecimento.start();
+
+          } catch (erro) {
+            mostrarStatus(
+              '❌ Não foi possível iniciar ' +
+              'o microfone.\n' +
+              erro.message
+            );
+          }
         }
-      });
+      );
     }
   </script>
 
